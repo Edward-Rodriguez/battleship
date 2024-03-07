@@ -4,8 +4,7 @@ const { Ship } = game;
 
 describe('The Ship factory', () => {
   test('Ship hit once', () => {
-    Ship.hit();
-    expect(Ship.length).toBe(1);
+    expect(Ship().hit()).toBe(1);
   });
 
   test.todo('Sunk');
