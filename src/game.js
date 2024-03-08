@@ -75,13 +75,13 @@ const Gameboard = (() => {
 
   return {
     placeShip,
+    get board() {
+      return board;
+    },
   };
 })();
 
 module.exports = {
-  get board() {
-    return this.board;
-  },
   Ship,
   Gameboard,
 };

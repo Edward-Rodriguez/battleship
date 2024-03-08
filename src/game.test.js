@@ -40,4 +40,12 @@ describe('The Gameboard factory', () => {
   test('place ship on invalid coordinated', () => {
     expect(Gameboard.placeShip(Ship, ['A1', 'B1', 'Z1'])).toBeFalsy();
   });
+  test('board cells: A1, B1, C1 are populated with the same ship instance', () => {
+    Gameboard.placeShip(Ship, ['A1', 'B1', 'C1']);
+    const fakeBoard = Array.from(Array(10), () => new Array(10).fill(null));
+    fakeBoard[0][0] = Ship;
+    fakeBoard[1][0] = Ship;
+    fakeBoard[2][0] = Ship;
+    expect(JSON.stringify(Gameboard.board)).toEqual(JSON.stringify(fakeBoard));
+  });
 });
