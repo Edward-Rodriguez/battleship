@@ -2,6 +2,10 @@ function Ship() {
   let length = null;
   let hitCounter = null;
 
+  function isSunk() {
+    return length ? length === hitCounter : false;
+  }
+
   function hit() {
     hitCounter += 1;
     return hitCounter;
@@ -15,7 +19,7 @@ function Ship() {
       length = newLength;
     },
     hit,
-    // isSunk,
+    isSunk,
   };
 }
 

@@ -26,6 +26,4 @@ describe('The Ship factory', () => {
     }
     expect(Ship.isSunk()).toBeFalsy();
   });
-
-  test.todo('Sunk');
 });
