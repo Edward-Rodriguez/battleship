@@ -31,13 +31,13 @@ describe('The Ship factory', () => {
 
 describe('The Gameboard factory', () => {
   beforeEach(() => {
-    Gameboard = game.Gameboard();
-    Ship = game.Ship();
+    Gameboard = game.Gameboard;
+    Ship = game.Ship(3);
   });
   test('place ship of length 3 on an empty board given valid coords', () => {
     expect(Gameboard.placeShip(Ship, ['A1', 'B1', 'C1'])).toBeTruthy();
   });
-  test.todo('place ship on invalid coordinated', () => {
+  test('place ship on invalid coordinated', () => {
     expect(Gameboard.placeShip(Ship, ['A1', 'B1', 'Z1'])).toBeFalsy();
   });
 });
