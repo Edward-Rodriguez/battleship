@@ -1,5 +1,5 @@
-function Ship() {
-  let length = null;
+function Ship(size = null) {
+  let length = size;
   let hitCounter = null;
 
   function isSunk() {

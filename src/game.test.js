@@ -1,12 +1,13 @@
 const game = require('./game');
 
 let Ship;
-
-beforeEach(() => {
-  Ship = game.Ship();
-});
+let Gameboard;
 
 describe('The Ship factory', () => {
+  beforeEach(() => {
+    Ship = game.Ship();
+  });
+
   test('ship hit once', () => {
     expect(Ship.hit()).toBe(1);
   });
@@ -25,5 +26,18 @@ describe('The Ship factory', () => {
       Ship.hit();
     }
     expect(Ship.isSunk()).toBeFalsy();
+  });
+});
+
+describe('The Gameboard factory', () => {
+  beforeEach(() => {
+    Gameboard = game.Gameboard();
+    Ship = game.Ship();
+  });
+  test('place ship of length 3 on an empty board given valid coords', () => {
+    expect(Gameboard.placeShip(Ship, ['A1', 'B1', 'C1'])).toBeTruthy();
+  });
+  test.todo('place ship on invalid coordinated', () => {
+    expect(Gameboard.placeShip(Ship, ['A1', 'B1', 'Z1'])).toBeFalsy();
   });
 });
