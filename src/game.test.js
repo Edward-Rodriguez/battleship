@@ -56,6 +56,7 @@ describe('The Gameboard factory', () => {
     test('attack hits a ship on board', () => {
       Gameboard.receiveAttack('A1');
       expect(Gameboard.board[0][0].hit()).toHaveBeenCalled();
+      expect(Gameboard.board[0][0].hitCounter).toBe(1);
     });
     test('attack misses, missed coords are returned', () => {
       expect(Gameboard.receiveAttack('A1')).toBe('A1');

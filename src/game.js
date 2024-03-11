@@ -18,6 +18,7 @@ function Ship(size = null) {
     set length(newLength) {
       length = newLength;
     },
+    get hitCounter(){return hitCounter}
     hit,
     isSunk,
   };
