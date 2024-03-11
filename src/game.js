@@ -18,7 +18,9 @@ function Ship(size = null) {
     set length(newLength) {
       length = newLength;
     },
-    get hitCounter(){return hitCounter}
+    get hitCounter() {
+      return hitCounter;
+    },
     hit,
     isSunk,
   };
@@ -74,8 +76,18 @@ const Gameboard = (() => {
     return true;
   }
 
+  function receiveAttack(coordinate) {
+    const [row, col] = [...coordinateToIndex(coordinate)];
+    if (board[row][col]) {
+      board[row][col].hit();
+      return true;
+    }
+    return coordinate;
+  }
+
   return {
     placeShip,
+    receiveAttack,
     get board() {
       return board;
     },
