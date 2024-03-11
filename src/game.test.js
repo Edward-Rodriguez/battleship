@@ -34,18 +34,31 @@ describe('The Gameboard factory', () => {
     Gameboard = game.Gameboard;
     Ship = game.Ship(3);
   });
-  test('place ship of length 3 on an empty board given valid coords', () => {
-    expect(Gameboard.placeShip(Ship, ['A1', 'B1', 'C1'])).toBeTruthy();
+  describe('placeShip method', () => {
+    test('place ship of length 3 on an empty board given valid coords', () => {
+      expect(Gameboard.placeShip(Ship, ['A1', 'B1', 'C1'])).toBeTruthy();
+    });
+    test('place ship on invalid coordinated', () => {
+      expect(Gameboard.placeShip(Ship, ['A1', 'B1', 'Z1'])).toBeFalsy();
+    });
+    test('board cells: A1, B1, C1 are populated with the same ship instance', () => {
+      Gameboard.placeShip(Ship, ['A1', 'B1', 'C1']);
+      const fakeBoard = Array.from(Array(10), () => new Array(10).fill(null));
+      fakeBoard[0][0] = Ship;
+      fakeBoard[1][0] = Ship;
+      fakeBoard[2][0] = Ship;
+      expect(JSON.stringify(Gameboard.board)).toEqual(
+        JSON.stringify(fakeBoard),
+      );
+    });
   });
-  test('place ship on invalid coordinated', () => {
-    expect(Gameboard.placeShip(Ship, ['A1', 'B1', 'Z1'])).toBeFalsy();
-  });
-  test('board cells: A1, B1, C1 are populated with the same ship instance', () => {
-    Gameboard.placeShip(Ship, ['A1', 'B1', 'C1']);
-    const fakeBoard = Array.from(Array(10), () => new Array(10).fill(null));
-    fakeBoard[0][0] = Ship;
-    fakeBoard[1][0] = Ship;
-    fakeBoard[2][0] = Ship;
-    expect(JSON.stringify(Gameboard.board)).toEqual(JSON.stringify(fakeBoard));
+  describe('receiveAttack method', () => {
+    test('attack hits a ship on board', () => {
+      Gameboard.receiveAttack('A1');
+      expect(Gameboard.board[0][0].hit()).toHaveBeenCalled();
+    });
+    test('attack misses, missed coords are returned', () => {
+      expect(Gameboard.receiveAttack('A1')).toBe('A1');
+    });
   });
 });
