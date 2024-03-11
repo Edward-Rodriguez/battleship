@@ -54,12 +54,13 @@ describe('The Gameboard factory', () => {
   });
   describe('receiveAttack method', () => {
     test('attack hits a ship on board', () => {
-      Gameboard.receiveAttack('A1');
-      expect(Gameboard.board[0][0].hit()).toHaveBeenCalled();
+      const spy = jest.spyOn(Gameboard.board[0][0], 'hit');
+      expect(Gameboard.receiveAttack('A1')).toBeTruthy();
+      expect(spy).toHaveBeenCalled();
       expect(Gameboard.board[0][0].hitCounter).toBe(1);
     });
     test('attack misses, missed coords are returned', () => {
-      expect(Gameboard.receiveAttack('A1')).toBe('A1');
+      expect(Gameboard.receiveAttack('E5')).toBe('E5');
     });
   });
 });
