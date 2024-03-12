@@ -83,4 +83,31 @@ describe('The Gameboard factory', () => {
       expect(Gameboard.missedAttacks).toEqual([]);
     });
   });
+  describe('The isEveryShipSunk method', () => {
+    test('all two ships sunk', () => {
+      const ship1 = game.Ship(3);
+      const ship2 = game.Ship(2);
+      Gameboard.placeShip(ship1, ['A1', 'B1', 'C1']);
+      Gameboard.placeShip(ship2, ['D1', 'D2']);
+      ship1.hit();
+      ship1.hit();
+      ship1.hit();
+      ship2.hit();
+      ship2.hit();
+      expect(ship1.isSunk()).toBeTruthy();
+      expect(ship2.isSunk()).toBeTruthy();
+      expect(Gameboard.isEveryShipSunk()).toBeTruthy();
+    });
+    test('all ships hit but not sunk', () => {
+      const Ship2 = game.Ship(2);
+      Gameboard.placeShip(Ship, ['A1', 'B1', 'C1']);
+      Gameboard.placeShip(Ship2, ['D1', 'D2']);
+      Ship.hit();
+      Ship.hit();
+      Ship2.hit();
+      expect(Ship.isSunk()).toBeFalsy();
+      expect(Ship2.isSunk()).toBeFalsy();
+      expect(Gameboard.isEveryShipSunk()).toBeFalsy();
+    });
+  });
 });
