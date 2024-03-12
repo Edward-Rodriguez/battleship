@@ -29,7 +29,7 @@ function Ship(size = null) {
 const Gameboard = (() => {
   const boardSize = 10;
   let board = new2DArray(boardSize);
-  const missedAttacks = [];
+  let missedAttacks = [];
 
   function coordinateToIndex(coordinate) {
     const [row, col] = coordinate.toUpperCase().split('');
@@ -87,6 +87,7 @@ const Gameboard = (() => {
 
   function reset() {
     board = new2DArray(boardSize);
+    missedAttacks = [];
   }
 
   return {

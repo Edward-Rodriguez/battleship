@@ -1,13 +1,15 @@
-const game = require('./game');
+// const game = require('./game');
 
 let Ship;
 let Gameboard;
+let game;
+
+beforeEach(() => {
+  game = require('./game');
+  Ship = game.Ship();
+});
 
 describe('The Ship factory', () => {
-  beforeEach(() => {
-    Ship = game.Ship();
-  });
-
   test('ship hit once', () => {
     expect(Ship.hit()).toBe(1);
   });
@@ -71,7 +73,7 @@ describe('The Gameboard factory', () => {
       Gameboard.receiveAttack('D1');
       Gameboard.receiveAttack('A1');
       Gameboard.receiveAttack('E1');
-      expect(Gameboard.missedAttacks).toBe(['D1', 'E1']);
+      expect(Gameboard.missedAttacks).toEqual(['D1', 'E1']);
     });
     test('3 attacks on ship, all hit no misses', () => {
       Gameboard.placeShip(Ship, ['A1', 'B1', 'C1']);
