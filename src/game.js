@@ -65,8 +65,7 @@ const Gameboard = (() => {
     }
     coordinates.forEach((coord) => {
       const [row, col] = coordinateToIndex(coord);
-      const newShip = Ship(coordinates.length);
-      board[row][col] = newShip;
+      board[row][col] = ship;
     });
     return true;
   }
