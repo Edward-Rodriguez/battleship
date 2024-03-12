@@ -28,13 +28,8 @@ function Ship(size = null) {
 
 const Gameboard = (() => {
   const boardSize = 10;
-  const board = [];
-  for (let row = 0; row < boardSize; row += 1) {
-    board[row] = [];
-    for (let col = 0; col < boardSize; col += 1) {
-      board[row][col] = null;
-    }
-  }
+  let board = new2DArray(boardSize);
+  const missedAttacks = [];
 
   function coordinateToIndex(coordinate) {
     const [row, col] = coordinate.toUpperCase().split('');
@@ -82,14 +77,27 @@ const Gameboard = (() => {
       board[row][col].hit();
       return true;
     }
+    missedAttacks.push(coordinate);
     return coordinate;
+  }
+
+  function new2DArray(size) {
+    return Array.from(Array(size), () => new Array(size).fill(null));
+  }
+
+  function reset() {
+    board = new2DArray(boardSize);
   }
 
   return {
     placeShip,
     receiveAttack,
+    reset,
     get board() {
       return board;
+    },
+    get missedAttacks() {
+      return missedAttacks;
     },
   };
 })();

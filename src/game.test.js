@@ -32,6 +32,7 @@ describe('The Ship factory', () => {
 describe('The Gameboard factory', () => {
   beforeEach(() => {
     Gameboard = game.Gameboard;
+    Gameboard.reset();
     Ship = game.Ship(3);
   });
   describe('placeShip method', () => {
@@ -54,6 +55,7 @@ describe('The Gameboard factory', () => {
   });
   describe('receiveAttack method', () => {
     test('attack hits a ship on board', () => {
+      Gameboard.placeShip(Ship, ['A1', 'B1', 'C1']);
       const spy = jest.spyOn(Gameboard.board[0][0], 'hit');
       expect(Gameboard.receiveAttack('A1')).toBeTruthy();
       expect(spy).toHaveBeenCalled();
@@ -64,19 +66,19 @@ describe('The Gameboard factory', () => {
     });
   });
   describe('The missedAttacks property', () => {
-    Gameboard.placeShip(Ship, ['A1', 'B1', 'C1']);
     test('2 missed attacks(D1,E1) on ship located on A1, B1, C1 ', () => {
-      Gameboard.receiveAttack(['D1']);
-      Gameboard.receiveAttack(['A1']);
-      Gameboard.receiveAttack(['E1']);
+      Gameboard.placeShip(Ship, ['A1', 'B1', 'C1']);
+      Gameboard.receiveAttack('D1');
+      Gameboard.receiveAttack('A1');
+      Gameboard.receiveAttack('E1');
       expect(Gameboard.missedAttacks).toBe(['D1', 'E1']);
     });
     test('3 attacks on ship, all hit no misses', () => {
       Gameboard.placeShip(Ship, ['A1', 'B1', 'C1']);
-      Gameboard.receiveAttack(['A1']);
-      Gameboard.receiveAttack(['B1']);
-      Gameboard.receiveAttack(['C1']);
-      expect(Gameboard.missedAttacks).toBe([]);
+      Gameboard.receiveAttack('A1');
+      Gameboard.receiveAttack('B1');
+      Gameboard.receiveAttack('C1');
+      expect(Gameboard.missedAttacks).toEqual([]);
     });
   });
 });
