@@ -89,10 +89,23 @@ const Gameboard = (() => {
     missedAttacks = [];
   }
 
+  function isEveryShipSunk() {
+    let shipsSunk = true;
+    board.forEach((row) =>
+      row.forEach((ship) => {
+        if (ship !== null && !ship.isSunk()) {
+          shipsSunk = false;
+        }
+      }),
+    );
+    return shipsSunk;
+  }
+
   return {
     placeShip,
     receiveAttack,
     reset,
+    isEveryShipSunk,
     get board() {
       return board;
     },
