@@ -63,4 +63,20 @@ describe('The Gameboard factory', () => {
       expect(Gameboard.receiveAttack('E5')).toBe('E5');
     });
   });
+  describe('The missedAttacks property', () => {
+    Gameboard.placeShip(Ship, ['A1', 'B1', 'C1']);
+    test('2 missed attacks(D1,E1) on ship located on A1, B1, C1 ', () => {
+      Gameboard.receiveAttack(['D1']);
+      Gameboard.receiveAttack(['A1']);
+      Gameboard.receiveAttack(['E1']);
+      expect(Gameboard.missedAttacks).toBe(['D1', 'E1']);
+    });
+    test('3 attacks on ship, all hit no misses', () => {
+      Gameboard.placeShip(Ship, ['A1', 'B1', 'C1']);
+      Gameboard.receiveAttack(['A1']);
+      Gameboard.receiveAttack(['B1']);
+      Gameboard.receiveAttack(['C1']);
+      expect(Gameboard.missedAttacks).toBe([]);
+    });
+  });
 });
