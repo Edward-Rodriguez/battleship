@@ -116,18 +116,18 @@ describe('The Player factory', () => {
   let player;
   test('player attack is added to attacksList', () => {
     player = game.Player();
-    player.attacksList.push('A1');
-    player.attacksList.push('A2');
+    player.attacksList.add('A1');
+    player.attacksList.add('A2');
     expect(player.attacksList).toContain('A1');
     expect(player.attacksList).toContain('A2');
-    expect(player.attacksList.length).toBe(2);
+    expect(player.attacksList.size).toBe(2);
   });
   test('player(computer) makes random move', () => {
     player = game.Player(true);
     player.randomAttack();
     const regex = /^[A-J]([2-9]|1[0]?)/; // A1 - J10
-    expect(player.attacksList.length).toBe(1);
-    expect(player.attacksList[0]).toMatch(regex);
+    expect(player.attacksList.size).toBe(1);
+    expect(player.attacksList.has(regex)).toBeTruthy();
   });
   test('player(computer) avoids duplicate random move', () => {
     player = game.Player(true);
@@ -135,7 +135,7 @@ describe('The Player factory', () => {
     for (let i = 0; i < 100; i += 1) {
       attackSet.add(player.randomAttack());
     }
-    expect(player.attacksList.length).toBe(100);
-    expect(attackSet.length).toBe(100);
+    expect(player.attacksList.size).toBe(100);
+    expect(attackSet.size).toBe(100);
   });
 });
