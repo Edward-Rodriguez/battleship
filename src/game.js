@@ -115,7 +115,44 @@ const Gameboard = () => {
   };
 };
 
+const Player = (isComputer = false) => {
+  const attacksList = new Set();
+  let availableMovesSet = new Set();
+
+  function generateMovesSet() {
+    const movesSet = new Set();
+    for (let i = 65; i <= 74; i += 1) {
+      // A-J unicode
+      for (let j = 1; j <= 10; j += 1) {
+        movesSet.add(String.fromCharCode(i) + j);
+      }
+    }
+    return movesSet;
+  }
+
+  if (isComputer) availableMovesSet = generateMovesSet();
+
+  function randomAttack() {
+    const random = Math.floor(Math.random() * availableMovesSet.size);
+    const randomCoordinate = Array.from(availableMovesSet)[random];
+    availableMovesSet.delete(randomCoordinate);
+    attacksList.add(randomCoordinate);
+    return randomCoordinate;
+  }
+
+  return {
+    get isComputer() {
+      return isComputer;
+    },
+    get attacksList() {
+      return attacksList;
+    },
+    randomAttack,
+  };
+};
+
 module.exports = {
   Ship,
   Gameboard,
+  Player,
 };
