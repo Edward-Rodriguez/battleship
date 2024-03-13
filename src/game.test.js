@@ -127,7 +127,9 @@ describe('The Player factory', () => {
     player.randomAttack();
     const regex = /^[A-J]([2-9]|1[0]?)/; // A1 - J10
     expect(player.attacksList.size).toBe(1);
-    expect(player.attacksList.has(regex)).toBeTruthy();
+    expect(
+      Array.from(player.attacksList).some((entry) => regex.test(entry)),
+    ).toBeTruthy();
   });
   test('player(computer) avoids duplicate random move', () => {
     player = game.Player(true);
