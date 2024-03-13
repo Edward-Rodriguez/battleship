@@ -26,7 +26,7 @@ function Ship(size = null) {
   };
 }
 
-const Gameboard = (() => {
+const Gameboard = () => {
   const boardSize = 10;
   let board = new2DArray(boardSize);
   let missedAttacks = [];
@@ -113,7 +113,7 @@ const Gameboard = (() => {
       return missedAttacks;
     },
   };
-})();
+};
 
 module.exports = {
   Ship,

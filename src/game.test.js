@@ -33,7 +33,7 @@ describe('The Ship factory', () => {
 
 describe('The Gameboard factory', () => {
   beforeEach(() => {
-    Gameboard = game.Gameboard;
+    Gameboard = game.Gameboard();
     Gameboard.reset();
     Ship = game.Ship(3);
   });
@@ -111,3 +111,9 @@ describe('The Gameboard factory', () => {
     });
   });
 });
+
+// describe('The Player factory', ()=>{
+//   beforeEach(()=>{
+
+//   })
+// })
