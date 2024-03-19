@@ -1,5 +1,3 @@
-// const game = require('./game');
-
 let Ship;
 let Gameboard;
 let game;
@@ -108,6 +106,11 @@ describe('The Gameboard factory', () => {
       expect(Ship.isSunk()).toBeFalsy();
       expect(Ship2.isSunk()).toBeFalsy();
       expect(Gameboard.isEveryShipSunk()).toBeFalsy();
+    });
+  });
+  describe('The indexToCoordinate method', () => {
+    test('Convert index: row[0], col[5] to "A6"', () => {
+      expect(Gameboard.indexToCoordinate(0, 5)).toBe('A6');
     });
   });
 });
