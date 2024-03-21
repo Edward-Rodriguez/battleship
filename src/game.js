@@ -39,6 +39,11 @@ const Gameboard = () => {
     return [rowIndexValue, colIndexValue];
   }
 
+  function indexToCoordinate(row, col) {
+    const rowCharCode = String.fromCharCode(row + 65);
+    return rowCharCode + (col + 1);
+  }
+
   function isValidCoordinate(coordinate) {
     let isValid = true;
     const [rowIndex, colIndex] = [...coordinateToIndex(coordinate)];
@@ -106,6 +111,7 @@ const Gameboard = () => {
     receiveAttack,
     reset,
     isEveryShipSunk,
+    indexToCoordinate,
     get board() {
       return board;
     },
@@ -151,37 +157,37 @@ const Player = (isComputer = false) => {
   };
 };
 
-const gameController = (() => {
-  const playerOne = Player();
-  const playerTwo = Player(true);
-  const playerOneBoard = Gameboard();
-  const playerTwoBoard = Gameboard();
+// const gameController = (() => {
+//   const playerOne = Player();
+//   const playerTwo = Player(true);
+//   const playerOneBoard = Gameboard();
+//   const playerTwoBoard = Gameboard();
 
-  const playerOneShipOne = Ship(5);
-  const playerOneShipTwo = Ship(3);
-  const playerOneShipThree = Ship(2);
+//   const playerOneShipOne = Ship(5);
+//   const playerOneShipTwo = Ship(3);
+//   const playerOneShipThree = Ship(2);
 
-  const playerTwoShipOne = Ship(4);
-  const playerTwoShipTwo = Ship(1);
-  const playerTwoShipThree = Ship(2);
+//   const playerTwoShipOne = Ship(4);
+//   const playerTwoShipTwo = Ship(1);
+//   const playerTwoShipThree = Ship(2);
 
-  playerOneBoard.placeShip(playerOneShipOne);
-  playerOneBoard.placeShip(playerOneShipTwo);
-  playerOneBoard.placeShip(playerOneShipThree);
+//   // playerOneBoard.placeShip(playerOneShipOne);
+//   // playerOneBoard.placeShip(playerOneShipTwo);
+//   // playerOneBoard.placeShip(playerOneShipThree);
 
-  playerTwoBoard.placeShip(playerTwoShipOne);
-  playerTwoBoard.placeShip(playerTwoShipTwo);
-  playerTwoBoard.placeShip(playerTwoShipThree);
+//   // playerTwoBoard.placeShip(playerTwoShipOne);
+//   // playerTwoBoard.placeShip(playerTwoShipTwo);
+//   // playerTwoBoard.placeShip(playerTwoShipThree);
 
-  const playRound = () => {};
-})();
+//   const playRound = () => {};
+// })();
 
-const displayController = (() => {})();
+// const displayController = (() => {})();
 
 module.exports = {
   Ship,
   Gameboard,
   Player,
-  gameController,
-  displayController,
+  // gameController,
+  // displayController,
 };
