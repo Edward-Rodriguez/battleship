@@ -1,6 +1,6 @@
 let Ship;
 let Gameboard;
-const game = require('./game');
+const game = require('.');
 
 beforeEach(() => {
   Ship = game.Ship();

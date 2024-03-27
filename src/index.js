@@ -201,6 +201,9 @@ const displayController = (() => {
       row.forEach((cell, colIndex) => {
         const cellButton = document.createElement('button');
         cellButton.dataset.coord = board.indexToCoordinate(rowIndex, colIndex);
+        if (cell) {
+          console.log(cell.length);
+        }
       }),
     );
     return boardDiv;
