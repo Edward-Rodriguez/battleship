@@ -1,3 +1,5 @@
+import './index.css';
+
 function Ship(size = null) {
   let length = size;
   let hitCounter = null;
@@ -192,27 +194,44 @@ const gameController = (() => {
   playerTwoBoard.placeShip(playerTwoShipThree, playerTwoShipPositions[2]);
 
   // const playRound = () => {};
+  return {
+    get playerOneBoard() {
+      return playerOneBoard;
+    },
+    get playerTwoBoard() {
+      return playerTwoBoard;
+    },
+  };
 })();
 
 const displayController = (() => {
-  const renderBoard = (board) => {
+  const pageContainer = document.querySelector('#page-container');
+
+  const renderBoard = (playerBoard) => {
     const boardDiv = document.createElement('div');
+    const { board } = playerBoard;
     board.forEach((row, rowIndex) =>
       row.forEach((cell, colIndex) => {
         const cellButton = document.createElement('button');
-        cellButton.dataset.coord = board.indexToCoordinate(rowIndex, colIndex);
+        cellButton.dataset.coord = playerBoard.indexToCoordinate(
+          rowIndex,
+          colIndex,
+        );
+        cellButton.classList.add('battlefield-cell');
         if (cell) {
-          console.log(cell.length);
+          cellButton.classList.add('ship-box');
         }
+        boardDiv.classList.add('player-board');
+        boardDiv.appendChild(cellButton);
       }),
     );
     return boardDiv;
   };
 
-  return {
-    renderBoard,
-  };
+  pageContainer.appendChild(renderBoard(gameController.playerOneBoard));
 })();
+
+// displayController.renderBoard(gameController.playerOneBoard);
 
 module.exports = {
   Ship,
