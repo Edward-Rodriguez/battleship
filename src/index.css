@@ -21,6 +21,7 @@ body {
   display: flex;
   justify-content: center;
   padding: 48px;
+  column-gap: 96px;
 }
 
 .player-board {

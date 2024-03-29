@@ -207,7 +207,7 @@ const gameController = (() => {
 const displayController = (() => {
   const pageContainer = document.querySelector('#page-container');
 
-  const renderBoard = (playerBoard) => {
+  const renderBoard = (playerBoard, isComputer = false) => {
     const boardDiv = document.createElement('div');
     const { board } = playerBoard;
     board.forEach((row, rowIndex) =>
@@ -218,7 +218,7 @@ const displayController = (() => {
           colIndex,
         );
         cellButton.classList.add('battlefield-cell');
-        if (cell) {
+        if (cell && !isComputer) {
           cellButton.classList.add('ship-box');
         }
         boardDiv.classList.add('player-board');
@@ -229,6 +229,7 @@ const displayController = (() => {
   };
 
   pageContainer.appendChild(renderBoard(gameController.playerOneBoard));
+  pageContainer.appendChild(renderBoard(gameController.playerTwoBoard, true));
 })();
 
 // displayController.renderBoard(gameController.playerOneBoard);
