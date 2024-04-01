@@ -164,6 +164,8 @@ const gameController = (() => {
   const playerTwo = Player(true);
   const playerOneBoard = Gameboard();
   const playerTwoBoard = Gameboard();
+  const activePlayer = playerOne;
+  const gameOver = false;
 
   const playerOneShipOne = Ship(5);
   const playerOneShipTwo = Ship(3);
@@ -193,7 +195,8 @@ const gameController = (() => {
   playerTwoBoard.placeShip(playerTwoShipTwo, playerTwoShipPositions[1]);
   playerTwoBoard.placeShip(playerTwoShipThree, playerTwoShipPositions[2]);
 
-  // const playRound = () => {};
+  const playRound = (attackCoord) => {};
+
   return {
     get playerOneBoard() {
       return playerOneBoard;
@@ -201,6 +204,10 @@ const gameController = (() => {
     get playerTwoBoard() {
       return playerTwoBoard;
     },
+    get activePlayer() {
+      return activePlayer;
+    },
+    playRound,
   };
 })();
 
