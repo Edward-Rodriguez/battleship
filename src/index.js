@@ -218,14 +218,14 @@ const displayController = (() => {
   function clickHandlerCell(ev, playerBoard) {
     const { board } = playerBoard;
     const selectedCell = ev.target;
-    const [row, col] = playerBoard.coordinateToIndex(
-      selectedCell.dataset.coord,
-    );
+    const selectedCellCoordinates = selectedCell.dataset.coord;
+    const [row, col] = playerBoard.coordinateToIndex(selectedCellCoordinates);
     if (board[row][col]) {
       selectedCell.classList.add('hit');
     } else {
       selectedCell.classList.add('miss');
     }
+    playerBoard.receiveAttack(selectedCellCoordinates);
   }
 
   const renderBoard = (playerBoard, isComputer = false) => {
