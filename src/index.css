@@ -49,7 +49,7 @@ body {
 }
 
 .ship-box {
-  background-color: rgba(0, 0, 255, 0.5);
+  background-color: #7878c9;
 }
 
 .hit {
@@ -59,4 +59,13 @@ body {
 .hit::after {
   display: inline-block;
   content: '\274c'; /* This will render the 'X' */
+}
+
+.miss {
+  background: transparent;
+}
+
+.miss::after {
+  display: inline-block;
+  content: '●'; /* This will render the 'X' */
 }

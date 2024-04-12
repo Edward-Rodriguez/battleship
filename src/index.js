@@ -1,5 +1,4 @@
 import './index.css';
-import HitMarkIcon from './assets/img/x-mark.svg';
 
 function Ship(size = null) {
   let length = size;
@@ -216,6 +215,19 @@ const gameController = (() => {
 const displayController = (() => {
   const pageContainer = document.querySelector('#page-container');
 
+  function clickHandlerCell(ev, playerBoard) {
+    const { board } = playerBoard;
+    const selectedCell = ev.target;
+    const [row, col] = playerBoard.coordinateToIndex(
+      selectedCell.dataset.coord,
+    );
+    if (board[row][col]) {
+      selectedCell.classList.add('hit');
+    } else {
+      selectedCell.classList.add('miss');
+    }
+  }
+
   const renderBoard = (playerBoard, isComputer = false) => {
     const boardDiv = document.createElement('div');
     const { board } = playerBoard;
@@ -237,17 +249,6 @@ const displayController = (() => {
     );
     return boardDiv;
   };
-
-  function clickHandlerCell(ev, playerBoard) {
-    const { board } = playerBoard;
-    const selectedCell = ev.target;
-    const [row, col] = playerBoard.coordinateToIndex(
-      selectedCell.dataset.coord,
-    );
-    if (board[row][col]) {
-      selectedCell.classList.add('hit');
-    }
-  }
 
   pageContainer.appendChild(renderBoard(gameController.playerOneBoard));
   pageContainer.appendChild(renderBoard(gameController.playerTwoBoard, true));
