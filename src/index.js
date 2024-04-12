@@ -1,4 +1,5 @@
 import './index.css';
+import HitMarkIcon from './assets/img/x-mark.svg';
 
 function Ship(size = null) {
   let length = size;
@@ -114,6 +115,7 @@ const Gameboard = () => {
     reset,
     isEveryShipSunk,
     indexToCoordinate,
+    coordinateToIndex,
     get board() {
       return board;
     },
@@ -220,15 +222,15 @@ const displayController = (() => {
     board.forEach((row, rowIndex) =>
       row.forEach((cell, colIndex) => {
         const cellButton = document.createElement('button');
-        cellButton.dataset.coord = playerBoard.indexToCoordinate(
-          rowIndex,
-          colIndex,
-        );
+        const coordinates = playerBoard.indexToCoordinate(rowIndex, colIndex);
+        cellButton.dataset.coord = coordinates;
         cellButton.classList.add('battlefield-cell');
         if (cell && !isComputer) {
           cellButton.classList.add('ship-box');
         }
-        cellButton.addEventListener('click', (ev) => clickHandlerCell(ev));
+        cellButton.addEventListener('click', (ev) =>
+          clickHandlerCell(ev, playerBoard),
+        );
         boardDiv.classList.add('player-board');
         boardDiv.appendChild(cellButton);
       }),
@@ -236,12 +238,13 @@ const displayController = (() => {
     return boardDiv;
   };
 
-  function clickHandlerCell(ev) {
+  function clickHandlerCell(ev, playerBoard) {
+    const { board } = playerBoard;
     const selectedCell = ev.target;
-    if (
-      selectedCell.classList.contains('ship-box') &&
-      !selectedCell.classList.contains('hit')
-    ) {
+    const [row, col] = playerBoard.coordinateToIndex(
+      selectedCell.dataset.coord,
+    );
+    if (board[row][col]) {
       selectedCell.classList.add('hit');
     }
   }

@@ -55,3 +55,8 @@ body {
 .hit {
   background-color: lightcoral;
 }
+
+.hit::after {
+  display: inline-block;
+  content: '\274c'; /* This will render the 'X' */
+}
