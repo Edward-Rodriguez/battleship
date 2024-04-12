@@ -228,6 +228,7 @@ const displayController = (() => {
         if (cell && !isComputer) {
           cellButton.classList.add('ship-box');
         }
+        cellButton.addEventListener('click', (ev) => clickHandlerCell(ev));
         boardDiv.classList.add('player-board');
         boardDiv.appendChild(cellButton);
       }),
@@ -235,16 +236,28 @@ const displayController = (() => {
     return boardDiv;
   };
 
+  function clickHandlerCell(ev) {
+    const selectedCell = ev.target;
+    if (
+      selectedCell.classList.contains('ship-box') &&
+      !selectedCell.classList.contains('hit')
+    ) {
+      selectedCell.classList.add('hit');
+    }
+  }
+
   pageContainer.appendChild(renderBoard(gameController.playerOneBoard));
   pageContainer.appendChild(renderBoard(gameController.playerTwoBoard, true));
 })();
 
 // displayController.renderBoard(gameController.playerOneBoard);
 
-module.exports = {
+const funcs = {
   Ship,
   Gameboard,
   Player,
   gameController,
   displayController,
 };
+
+export default funcs;
