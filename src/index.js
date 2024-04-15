@@ -127,6 +127,7 @@ const Gameboard = () => {
 const Player = (isComputer = false) => {
   const attacksList = new Set();
   let availableMovesSet = new Set();
+  let activePlayer = false;
 
   function generateMovesSet() {
     const movesSet = new Set();
@@ -156,6 +157,12 @@ const Player = (isComputer = false) => {
     get attacksList() {
       return attacksList;
     },
+    get activePlayer() {
+      return activePlayer;
+    },
+    set activePlayer(activeFlag) {
+      activePlayer = activeFlag;
+    },
     randomAttack,
   };
 };
@@ -165,8 +172,8 @@ const gameController = (() => {
   const playerTwo = Player(true);
   const playerOneBoard = Gameboard();
   const playerTwoBoard = Gameboard();
-  const activePlayer = playerOne;
-  const gameOver = false;
+  let gameOver = false;
+  playerOne.activePlayer = true;
 
   const playerOneShipOne = Ship(5);
   const playerOneShipTwo = Ship(3);
@@ -196,7 +203,23 @@ const gameController = (() => {
   playerTwoBoard.placeShip(playerTwoShipTwo, playerTwoShipPositions[1]);
   playerTwoBoard.placeShip(playerTwoShipThree, playerTwoShipPositions[2]);
 
-  const playRound = (attackCoord) => {};
+  const playRound = (attackCoord) => {
+    if (!gameOver) {
+      if (playerOne.activePlayer) {
+        playerOneBoard.receiveAttack(attackCoord);
+        playerOne.activePlayer = false;
+        playerTwo.activePlayer = true;
+      } else {
+        const randomAttackCoord = playerTwo.randomAttack();
+        playerTwoBoard.receiveAttack(randomAttackCoord);
+        playerTwo.activePlayer = false;
+        playerOne.activePlayer = true;
+      }
+    }
+    if (playerOneBoard.isEveryShipSunk() || playerTwoBoard.isEveryShipSunk()) {
+      gameOver = true;
+    }
+  };
 
   return {
     get playerOneBoard() {
@@ -205,8 +228,8 @@ const gameController = (() => {
     get playerTwoBoard() {
       return playerTwoBoard;
     },
-    get activePlayer() {
-      return activePlayer;
+    get gameOver() {
+      return gameOver;
     },
     playRound,
   };
@@ -220,17 +243,18 @@ const displayController = (() => {
     const selectedCell = ev.target;
     const selectedCellCoordinates = selectedCell.dataset.coord;
     const [row, col] = playerBoard.coordinateToIndex(selectedCellCoordinates);
+    gameController.playRound(selectedCellCoordinates);
     if (board[row][col]) {
       selectedCell.classList.add('hit');
     } else {
       selectedCell.classList.add('miss');
     }
-    playerBoard.receiveAttack(selectedCellCoordinates);
   }
 
   const renderBoard = (playerBoard, isComputer = false) => {
     const boardDiv = document.createElement('div');
     const { board } = playerBoard;
+    let initAlphaCharCode = 63;
     board.forEach((row, rowIndex) =>
       row.forEach((cell, colIndex) => {
         const cellButton = document.createElement('button');
@@ -244,9 +268,37 @@ const displayController = (() => {
           clickHandlerCell(ev, playerBoard),
         );
         boardDiv.classList.add('player-board');
+
+        // add alphabetic row labels to the left side of board
+        if (colIndex % 10 === 0) {
+          boardDiv.appendChild(newLabelDiv((initAlphaCharCode += 1)));
+        }
+
         boardDiv.appendChild(cellButton);
       }),
     );
+
+    // add numeric column labels under the board
+    boardDiv.appendChild(newLabelDiv(-1));
+    for (let i = 1; i <= 10; i++) {
+      boardDiv.appendChild(newLabelDiv(i, true));
+    }
+
+    function nextChar(charCode) {
+      return String.fromCharCode(charCode + 1);
+    }
+
+    function newLabelDiv(charCode, isNum = false) {
+      const labelDiv = document.createElement('div');
+      labelDiv.classList.add('board-label');
+      if (isNum) {
+        labelDiv.textContent = charCode;
+      } else {
+        labelDiv.textContent = nextChar(charCode);
+      }
+      return labelDiv;
+    }
+
     return boardDiv;
   };
 

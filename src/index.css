@@ -26,10 +26,18 @@ body {
 
 .player-board {
   display: grid;
-  grid-template-columns: repeat(10, 32px);
-  grid-template-rows: repeat(10, 32px);
+  grid-template-columns: repeat(11, 32px);
+  grid-template-rows: repeat(11, 32px);
   width: 320px;
   height: 320px;
+}
+
+.board-label {
+  height: 32px;
+  width: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .battlefield-cell {
