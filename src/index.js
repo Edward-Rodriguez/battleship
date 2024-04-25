@@ -29,6 +29,10 @@ function Ship(size = null) {
 }
 
 const Gameboard = () => {
+  function new2DArray(size) {
+    return Array.from(Array(size), () => new Array(size).fill(null));
+  }
+
   const boardSize = 10;
   let board = new2DArray(boardSize);
   let missedAttacks = [];
@@ -85,10 +89,6 @@ const Gameboard = () => {
     }
     missedAttacks.push(coordinate);
     return coordinate;
-  }
-
-  function new2DArray(size) {
-    return Array.from(Array(size), () => new Array(size).fill(null));
   }
 
   function reset() {
@@ -203,13 +203,29 @@ const gameController = (() => {
   playerTwoBoard.placeShip(playerTwoShipTwo, playerTwoShipPositions[1]);
   playerTwoBoard.placeShip(playerTwoShipThree, playerTwoShipPositions[2]);
 
+  // const playRound = (attackCoord) => {
+  //   if (!gameOver) {
+  //     if (playerOne.activePlayer) {
+  //       playerOneBoard.receiveAttack(attackCoord);
+  //       playerOne.activePlayer = false;
+  //       playerTwo.activePlayer = true;
+  //     } else {
+  //       const randomAttackCoord = playerTwo.randomAttack();
+  //       playerTwoBoard.receiveAttack(randomAttackCoord);
+  //       playerTwo.activePlayer = false;
+  //       playerOne.activePlayer = true;
+  //     }
+  //   }
+  //   if (playerOneBoard.isEveryShipSunk() || playerTwoBoard.isEveryShipSunk()) {
+  //     gameOver = true;
+  //   }
+  // };
   const playRound = (attackCoord) => {
     if (!gameOver) {
-      if (playerOne.activePlayer) {
-        playerOneBoard.receiveAttack(attackCoord);
-        playerOne.activePlayer = false;
-        playerTwo.activePlayer = true;
-      } else {
+      playerOneBoard.receiveAttack(attackCoord);
+      playerOne.activePlayer = false;
+      playerTwo.activePlayer = true;
+      if (!playerTwoBoard.isEveryShipSunk()) {
         const randomAttackCoord = playerTwo.randomAttack();
         playerTwoBoard.receiveAttack(randomAttackCoord);
         playerTwo.activePlayer = false;
@@ -238,31 +254,38 @@ const gameController = (() => {
 const displayController = (() => {
   const pageContainer = document.querySelector('#page-container');
 
-  function clickHandlerCell(ev, playerBoard) {
-    const { board } = playerBoard;
-    const selectedCell = ev.target;
-    const selectedCellCoordinates = selectedCell.dataset.coord;
-    const [row, col] = playerBoard.coordinateToIndex(selectedCellCoordinates);
-    gameController.playRound(selectedCellCoordinates);
-    if (board[row][col]) {
-      selectedCell.classList.add('hit');
-    } else {
-      selectedCell.classList.add('miss');
-    }
-  }
-
-  const renderBoard = (playerBoard, isComputer = false) => {
+  const refreshBoard = (playerBoard, isComputer = false) => {
     const boardDiv = document.createElement('div');
     const { board } = playerBoard;
     let initAlphaCharCode = 63;
+
+    function nextChar(charCode) {
+      return String.fromCharCode(charCode + 1);
+    }
+
+    function newLabelDiv(charCode, isNum = false) {
+      const labelDiv = document.createElement('div');
+      labelDiv.classList.add('board-label');
+      if (isNum) {
+        labelDiv.textContent = charCode;
+      } else {
+        labelDiv.textContent = nextChar(charCode);
+      }
+      return labelDiv;
+    }
+
     board.forEach((row, rowIndex) =>
       row.forEach((cell, colIndex) => {
         const cellButton = document.createElement('button');
         const coordinates = playerBoard.indexToCoordinate(rowIndex, colIndex);
         cellButton.dataset.coord = coordinates;
         cellButton.classList.add('battlefield-cell');
-        if (cell && !isComputer) {
-          cellButton.classList.add('ship-box');
+        if (!isComputer) {
+          cellButton.disabled = true;
+          cellButton.classList.add('player');
+          if (cell) {
+            cellButton.classList.add('ship-box');
+          }
         }
         cellButton.addEventListener('click', (ev) =>
           clickHandlerCell(ev, playerBoard),
@@ -280,33 +303,32 @@ const displayController = (() => {
 
     // add numeric column labels under the board
     boardDiv.appendChild(newLabelDiv(-1));
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 10; i += 1) {
       boardDiv.appendChild(newLabelDiv(i, true));
-    }
-
-    function nextChar(charCode) {
-      return String.fromCharCode(charCode + 1);
-    }
-
-    function newLabelDiv(charCode, isNum = false) {
-      const labelDiv = document.createElement('div');
-      labelDiv.classList.add('board-label');
-      if (isNum) {
-        labelDiv.textContent = charCode;
-      } else {
-        labelDiv.textContent = nextChar(charCode);
-      }
-      return labelDiv;
     }
 
     return boardDiv;
   };
 
-  pageContainer.appendChild(renderBoard(gameController.playerOneBoard));
-  pageContainer.appendChild(renderBoard(gameController.playerTwoBoard, true));
+  function clickHandlerCell(ev, playerBoard) {
+    const { board } = playerBoard;
+    const selectedCell = ev.target;
+    const selectedCellCoordinates = selectedCell.dataset.coord;
+    const [row, col] = playerBoard.coordinateToIndex(selectedCellCoordinates);
+    gameController.playRound(selectedCellCoordinates);
+    if (board[row][col]) {
+      selectedCell.classList.add('hit');
+    } else {
+      selectedCell.classList.add('miss');
+    }
+    refreshBoard(playerBoard);
+  }
+
+  pageContainer.appendChild(refreshBoard(gameController.playerOneBoard));
+  pageContainer.appendChild(refreshBoard(gameController.playerTwoBoard, true));
 })();
 
-// displayController.renderBoard(gameController.playerOneBoard);
+// displayController.refreshBoard(gameController.playerOneBoard);
 
 const funcs = {
   Ship,
