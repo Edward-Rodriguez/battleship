@@ -38,7 +38,8 @@ const Gameboard = () => {
   let missedAttacks = [];
 
   function coordinateToIndex(coordinate) {
-    const [row, col] = coordinate.toUpperCase().split('');
+    const row = coordinate[0].toUpperCase();
+    const col = coordinate.substring(1);
     const rowCharCode = row.charCodeAt();
     const rowIndexValue = rowCharCode - 65;
     const colIndexValue = Number(col) - 1;
@@ -203,38 +204,20 @@ const gameController = (() => {
   playerTwoBoard.placeShip(playerTwoShipTwo, playerTwoShipPositions[1]);
   playerTwoBoard.placeShip(playerTwoShipThree, playerTwoShipPositions[2]);
 
-  // const playRound = (attackCoord) => {
-  //   if (!gameOver) {
-  //     if (playerOne.activePlayer) {
-  //       playerOneBoard.receiveAttack(attackCoord);
-  //       playerOne.activePlayer = false;
-  //       playerTwo.activePlayer = true;
-  //     } else {
-  //       const randomAttackCoord = playerTwo.randomAttack();
-  //       playerTwoBoard.receiveAttack(randomAttackCoord);
-  //       playerTwo.activePlayer = false;
-  //       playerOne.activePlayer = true;
-  //     }
-  //   }
-  //   if (playerOneBoard.isEveryShipSunk() || playerTwoBoard.isEveryShipSunk()) {
-  //     gameOver = true;
-  //   }
-  // };
-  const playRound = (attackCoord) => {
+  const playRound = (attackCoord, playerTwoTurn = false) => {
+    let randomAttackCoord = null;
     if (!gameOver) {
-      playerOneBoard.receiveAttack(attackCoord);
-      playerOne.activePlayer = false;
-      playerTwo.activePlayer = true;
-      if (!playerTwoBoard.isEveryShipSunk()) {
-        const randomAttackCoord = playerTwo.randomAttack();
+      if (!playerTwoTurn) {
+        playerOneBoard.receiveAttack(attackCoord);
+      } else {
+        randomAttackCoord = playerTwo.randomAttack();
         playerTwoBoard.receiveAttack(randomAttackCoord);
-        playerTwo.activePlayer = false;
-        playerOne.activePlayer = true;
       }
     }
     if (playerOneBoard.isEveryShipSunk() || playerTwoBoard.isEveryShipSunk()) {
       gameOver = true;
     }
+    return randomAttackCoord;
   };
 
   return {
@@ -252,7 +235,9 @@ const gameController = (() => {
 })();
 
 const displayController = (() => {
-  const pageContainer = document.querySelector('#page-container');
+  const playerOneBoardDiv = document.querySelector('#playerOneBoard');
+  const playerTwoBoardDiv = document.querySelector('#playerTwoBoard');
+  const { playerOneBoard, playerTwoBoard } = gameController;
 
   const refreshBoard = (playerBoard, isComputer = false) => {
     const boardDiv = document.createElement('div');
@@ -287,9 +272,8 @@ const displayController = (() => {
             cellButton.classList.add('ship-box');
           }
         }
-        cellButton.addEventListener('click', (ev) =>
-          clickHandlerCell(ev, playerBoard),
-        );
+        cellButton.addEventListener('click', (ev) => clickHandlerCell(ev));
+
         boardDiv.classList.add('player-board');
 
         // add alphabetic row labels to the left side of board
@@ -310,25 +294,40 @@ const displayController = (() => {
     return boardDiv;
   };
 
-  function clickHandlerCell(ev, playerBoard) {
-    const { board } = playerBoard;
+  function clickHandlerCell(ev) {
     const selectedCell = ev.target;
     const selectedCellCoordinates = selectedCell.dataset.coord;
-    const [row, col] = playerBoard.coordinateToIndex(selectedCellCoordinates);
+    const [row, col] = playerOneBoard.coordinateToIndex(
+      selectedCellCoordinates,
+    );
     gameController.playRound(selectedCellCoordinates);
-    if (board[row][col]) {
+    if (playerTwoBoard.board[row][col]) {
       selectedCell.classList.add('hit');
     } else {
       selectedCell.classList.add('miss');
     }
-    refreshBoard(playerBoard);
+
+    const playerOneAttackCooord = gameController.playRound(undefined, true);
+    const playerOneAttackCell = document.querySelector(
+      `[data-coord="${playerOneAttackCooord}"]`,
+    );
+    const [playerOneRow, playerOneCol] = playerOneBoard.coordinateToIndex(
+      playerOneAttackCooord,
+    );
+    playerOneAttackCell.disabled = false;
+
+    if (playerOneBoard.board[playerOneRow][playerOneCol]) {
+      playerOneAttackCell.classList.add('hit');
+    } else {
+      playerOneAttackCell.classList.add('miss');
+    }
+    selectedCell.disabled = true;
+    playerOneAttackCell.disabled = true;
   }
 
-  pageContainer.appendChild(refreshBoard(gameController.playerOneBoard));
-  pageContainer.appendChild(refreshBoard(gameController.playerTwoBoard, true));
+  playerOneBoardDiv.appendChild(refreshBoard(playerOneBoard));
+  playerTwoBoardDiv.appendChild(refreshBoard(playerTwoBoard, true));
 })();
-
-// displayController.refreshBoard(gameController.playerOneBoard);
 
 const funcs = {
   Ship,
