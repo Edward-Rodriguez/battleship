@@ -208,14 +208,17 @@ const gameController = (() => {
     let randomAttackCoord = null;
     if (!gameOver) {
       if (!playerTwoTurn) {
-        playerOneBoard.receiveAttack(attackCoord);
+        playerTwoBoard.receiveAttack(attackCoord);
       } else {
         randomAttackCoord = playerTwo.randomAttack();
-        playerTwoBoard.receiveAttack(randomAttackCoord);
+        playerOneBoard.receiveAttack(randomAttackCoord);
       }
-    }
-    if (playerOneBoard.isEveryShipSunk() || playerTwoBoard.isEveryShipSunk()) {
-      gameOver = true;
+      if (
+        playerOneBoard.isEveryShipSunk() ||
+        playerTwoBoard.isEveryShipSunk()
+      ) {
+        gameOver = true;
+      }
     }
     return randomAttackCoord;
   };
@@ -308,21 +311,23 @@ const displayController = (() => {
     }
 
     const playerOneAttackCooord = gameController.playRound(undefined, true);
-    const playerOneAttackCell = document.querySelector(
-      `[data-coord="${playerOneAttackCooord}"]`,
-    );
-    const [playerOneRow, playerOneCol] = playerOneBoard.coordinateToIndex(
-      playerOneAttackCooord,
-    );
-    playerOneAttackCell.disabled = false;
+    if (playerOneAttackCooord) {
+      const playerOneAttackCell = document.querySelector(
+        `[data-coord="${playerOneAttackCooord}"]`,
+      );
+      const [playerOneRow, playerOneCol] = playerOneBoard.coordinateToIndex(
+        playerOneAttackCooord,
+      );
+      playerOneAttackCell.disabled = false;
 
-    if (playerOneBoard.board[playerOneRow][playerOneCol]) {
-      playerOneAttackCell.classList.add('hit');
-    } else {
-      playerOneAttackCell.classList.add('miss');
+      if (playerOneBoard.board[playerOneRow][playerOneCol]) {
+        playerOneAttackCell.classList.add('hit');
+      } else {
+        playerOneAttackCell.classList.add('miss');
+      }
+      selectedCell.disabled = true;
+      playerOneAttackCell.disabled = true;
     }
-    selectedCell.disabled = true;
-    playerOneAttackCell.disabled = true;
   }
 
   playerOneBoardDiv.appendChild(refreshBoard(playerOneBoard));
