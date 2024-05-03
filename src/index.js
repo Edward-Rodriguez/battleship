@@ -310,23 +310,31 @@ const displayController = (() => {
       selectedCell.classList.add('miss');
     }
 
+    function delay(time) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, time);
+      });
+    }
+
     const playerOneAttackCooord = gameController.playRound(undefined, true);
     if (playerOneAttackCooord) {
-      const playerOneAttackCell = document.querySelector(
-        `[data-coord="${playerOneAttackCooord}"]`,
-      );
-      const [playerOneRow, playerOneCol] = playerOneBoard.coordinateToIndex(
-        playerOneAttackCooord,
-      );
-      playerOneAttackCell.disabled = false;
+      delay(500).then(() => {
+        const playerOneAttackCell = document.querySelector(
+          `[data-coord="${playerOneAttackCooord}"]`,
+        );
+        const [playerOneRow, playerOneCol] = playerOneBoard.coordinateToIndex(
+          playerOneAttackCooord,
+        );
+        playerOneAttackCell.disabled = false;
 
-      if (playerOneBoard.board[playerOneRow][playerOneCol]) {
-        playerOneAttackCell.classList.add('hit');
-      } else {
-        playerOneAttackCell.classList.add('miss');
-      }
-      selectedCell.disabled = true;
-      playerOneAttackCell.disabled = true;
+        if (playerOneBoard.board[playerOneRow][playerOneCol]) {
+          playerOneAttackCell.classList.add('hit');
+        } else {
+          playerOneAttackCell.classList.add('miss');
+        }
+        selectedCell.disabled = true;
+        playerOneAttackCell.disabled = true;
+      });
     }
   }
 
