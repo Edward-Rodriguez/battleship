@@ -357,8 +357,12 @@ const displayController = (() => {
     const resultsDiv = document.querySelector('#resultsBoard');
     if (winningPlayer === gameController.playerOne) {
       resultsDiv.textContent = 'You Win!';
+      resultsDiv.classList.add('winner');
+      resultsDiv.classList.remove('loser');
     } else {
       resultsDiv.textContent = 'Opponent Wins!';
+      resultsDiv.classList.add('loser');
+      resultsDiv.classList.remove('winner');
     }
   }
 

@@ -27,7 +27,8 @@ body {
 
 .player-board {
   display: grid;
-  margin: 24px;
+  margin: 32px;
+  gap: 1px;
   grid-template-columns: repeat(11, 32px);
   grid-template-rows: repeat(11, 32px);
   width: 320px;
@@ -37,6 +38,8 @@ body {
 .board-label {
   height: 32px;
   width: 32px;
+  font-weight: 600;
+  color: rgb(125, 125, 125);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,6 +47,7 @@ body {
 
 .battlefield-cell {
   background: none;
+  border-radius: 2px;
   color: inherit;
   border: none;
   padding: 0;
@@ -59,11 +63,11 @@ body {
 }
 
 .ship-box {
-  background-color: #7878c9;
+  background-color: #8282db;
 }
 
 .hit {
-  background-color: lightcoral;
+  background-color: #f08080;
 }
 
 .hit::after {
@@ -87,5 +91,13 @@ body {
   font-size: 2.5rem;
   font-weight: 800;
   width: 100%;
-  margin: 48px;
+  margin-top: 48px;
+}
+
+.loser {
+  color: lightcoral;
+}
+
+.winner {
+  color: #0e940e;
 }
