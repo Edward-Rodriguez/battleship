@@ -18,21 +18,42 @@ body {
 }
 
 #page-container {
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  grid-template-columns: repeat(2, auto);
+  grid-template-areas:
+    'header header'
+    'playerBoard playerBoard'
+    'resultsBoard resultsBoard';
+  place-items: center;
+}
+
+#header {
+  grid-area: header;
+}
+
+#playerOneTitle {
+  grid-area: playerOneTitle;
+}
+
+#playerTwoTitle {
+  grid-area: playerTwoTitle;
+}
+
+#boards {
+  grid-area: playerBoard;
   display: flex;
   flex-wrap: wrap;
+  gap: 48px;
   justify-content: center;
-  padding: 48px;
-  column-gap: 96px;
+  align-items: center;
 }
 
 .player-board {
   display: grid;
-  margin: 32px;
   gap: 1px;
   grid-template-columns: repeat(11, 32px);
   grid-template-rows: repeat(11, 32px);
-  width: 320px;
-  height: 320px;
 }
 
 .board-label {
@@ -53,13 +74,20 @@ body {
   padding: 0;
   font: inherit;
   outline: inherit;
-  border: 1px solid #b4b4ff;
+  border: 1px solid #dcdbdb;
   height: 32px;
   width: 32px;
+  transition: all 0.2s ease-out;
 }
 
-.battlefield-cell:hover {
+#playerOneBoard,
+#playerTwoBoard {
+  text-align: center;
+}
+
+#playerTwoBoard .battlefield-cell:hover:not(.hit) {
   cursor: pointer;
+  background-color: #ebebeb;
 }
 
 .ship-box {
@@ -85,6 +113,7 @@ body {
 }
 
 #resultsBoard {
+  grid-area: resultsBoard;
   display: flex;
   justify-content: center;
   align-items: center;

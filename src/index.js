@@ -321,31 +321,23 @@ const displayController = (() => {
       selectedCell.classList.add('miss');
     }
 
-    function delay(time) {
-      return new Promise((resolve) => {
-        setTimeout(resolve, time);
-      });
-    }
-
     const playerOneAttackCooord = gameController.playRound(undefined, true);
     if (playerOneAttackCooord) {
-      delay(200).then(() => {
-        const playerOneAttackCell = document.querySelector(
-          `[data-coord="${playerOneAttackCooord}"]`,
-        );
-        const [playerOneRow, playerOneCol] = playerOneBoard.coordinateToIndex(
-          playerOneAttackCooord,
-        );
-        playerOneAttackCell.disabled = false;
+      const playerOneAttackCell = document.querySelector(
+        `[data-coord="${playerOneAttackCooord}"]`,
+      );
+      const [playerOneRow, playerOneCol] = playerOneBoard.coordinateToIndex(
+        playerOneAttackCooord,
+      );
+      playerOneAttackCell.disabled = false;
 
-        if (playerOneBoard.board[playerOneRow][playerOneCol]) {
-          playerOneAttackCell.classList.add('hit');
-        } else {
-          playerOneAttackCell.classList.add('miss');
-        }
-        selectedCell.disabled = true;
-        playerOneAttackCell.disabled = true;
-      });
+      if (playerOneBoard.board[playerOneRow][playerOneCol]) {
+        playerOneAttackCell.classList.add('hit');
+      } else {
+        playerOneAttackCell.classList.add('miss');
+      }
+      selectedCell.disabled = true;
+      playerOneAttackCell.disabled = true;
     }
 
     if (gameController.gameOver) {
@@ -360,7 +352,7 @@ const displayController = (() => {
       resultsDiv.classList.add('winner');
       resultsDiv.classList.remove('loser');
     } else {
-      resultsDiv.textContent = 'Opponent Wins!';
+      resultsDiv.textContent = 'You Lose';
       resultsDiv.classList.add('loser');
       resultsDiv.classList.remove('winner');
     }
