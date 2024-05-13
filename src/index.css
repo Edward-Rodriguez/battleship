@@ -19,6 +19,7 @@ body {
 
 #page-container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   padding: 48px;
   column-gap: 96px;
@@ -26,6 +27,7 @@ body {
 
 .player-board {
   display: grid;
+  margin: 24px;
   grid-template-columns: repeat(11, 32px);
   grid-template-rows: repeat(11, 32px);
   width: 320px;
@@ -76,4 +78,14 @@ body {
 .miss::after {
   display: inline-block;
   content: '●'; /* This will render the 'X' */
+}
+
+#resultsBoard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  width: 100%;
+  margin: 48px;
 }

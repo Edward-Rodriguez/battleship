@@ -174,6 +174,7 @@ const gameController = (() => {
   const playerOneBoard = Gameboard();
   const playerTwoBoard = Gameboard();
   let gameOver = false;
+  let winner = null;
   playerOne.activePlayer = true;
 
   const playerOneShipOne = Ship(5);
@@ -213,10 +214,11 @@ const gameController = (() => {
         randomAttackCoord = playerTwo.randomAttack();
         playerOneBoard.receiveAttack(randomAttackCoord);
       }
-      if (
-        playerOneBoard.isEveryShipSunk() ||
-        playerTwoBoard.isEveryShipSunk()
-      ) {
+      if (playerOneBoard.isEveryShipSunk()) {
+        winner = playerTwo;
+        gameOver = true;
+      } else if (playerTwoBoard.isEveryShipSunk()) {
+        winner = playerOne;
         gameOver = true;
       }
     }
@@ -232,6 +234,15 @@ const gameController = (() => {
     },
     get gameOver() {
       return gameOver;
+    },
+    get winner() {
+      return winner;
+    },
+    get playerOne() {
+      return playerOne;
+    },
+    get playerTwo() {
+      return playerTwo;
     },
     playRound,
   };
@@ -318,7 +329,7 @@ const displayController = (() => {
 
     const playerOneAttackCooord = gameController.playRound(undefined, true);
     if (playerOneAttackCooord) {
-      delay(500).then(() => {
+      delay(200).then(() => {
         const playerOneAttackCell = document.querySelector(
           `[data-coord="${playerOneAttackCooord}"]`,
         );
@@ -335,6 +346,19 @@ const displayController = (() => {
         selectedCell.disabled = true;
         playerOneAttackCell.disabled = true;
       });
+    }
+
+    if (gameController.gameOver) {
+      displayWinner(gameController.winner);
+    }
+  }
+
+  function displayWinner(winningPlayer) {
+    const resultsDiv = document.querySelector('#resultsBoard');
+    if (winningPlayer === gameController.playerOne) {
+      resultsDiv.textContent = 'You Win!';
+    } else {
+      resultsDiv.textContent = 'Opponent Wins!';
     }
   }
 
