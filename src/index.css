@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
 
 *,
 *::before,
@@ -20,7 +21,6 @@ body {
 #page-container {
   display: grid;
   grid-template-rows: repeat(3, auto);
-  grid-template-columns: repeat(2, auto);
   grid-template-areas:
     'header header'
     'playerBoard playerBoard'
@@ -30,14 +30,32 @@ body {
 
 #header {
   grid-area: header;
+  font-family: 'Black Ops One', system-ui;
+  font-weight: 400;
+  font-size: 48px;
+  font-style: normal;
+  padding: 16px;
+  background-color: #ebebeb;
+  width: 100%;
+  text-align: center;
+}
+
+#playerOneTitle,
+#playerTwoTitle {
+  grid-area: playerOneTitle;
+  /* font-family: 'Black Ops One', system-ui; */
+  font-size: 24px;
+  font-weight: 800;
+  font-style: normal;
+  padding: 24px 0px 12px 0px;
 }
 
 #playerOneTitle {
-  grid-area: playerOneTitle;
+  color: rgba(64, 95, 127, 0.765);
 }
 
 #playerTwoTitle {
-  grid-area: playerTwoTitle;
+  color: rgb(212, 106, 106);
 }
 
 #boards {
@@ -91,11 +109,11 @@ body {
 }
 
 .ship-box {
-  background-color: #8282db;
+  background-color: rgba(64, 95, 127, 0.669);
 }
 
 .hit {
-  background-color: #f08080;
+  background-color: rgba(212, 106, 106, 0.669);
 }
 
 .hit::after {
