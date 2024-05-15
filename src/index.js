@@ -169,13 +169,12 @@ const Player = (isComputer = false) => {
 };
 
 const gameController = (() => {
-  const playerOne = Player();
-  const playerTwo = Player(true);
-  const playerOneBoard = Gameboard();
-  const playerTwoBoard = Gameboard();
-  let gameOver = false;
-  let winner = null;
-  playerOne.activePlayer = true;
+  let playerOne;
+  let playerTwo;
+  let playerOneBoard;
+  let playerTwoBoard;
+  let gameOver;
+  let winner;
 
   const playerOneShipOne = Ship(5);
   const playerOneShipTwo = Ship(3);
@@ -197,14 +196,6 @@ const gameController = (() => {
     ['I4', 'I5'],
   ];
 
-  playerOneBoard.placeShip(playerOneShipOne, playerOneShipPositions[0]);
-  playerOneBoard.placeShip(playerOneShipTwo, playerOneShipPositions[1]);
-  playerOneBoard.placeShip(playerOneShipThree, playerOneShipPositions[2]);
-
-  playerTwoBoard.placeShip(playerTwoShipOne, playerTwoShipPositions[0]);
-  playerTwoBoard.placeShip(playerTwoShipTwo, playerTwoShipPositions[1]);
-  playerTwoBoard.placeShip(playerTwoShipThree, playerTwoShipPositions[2]);
-
   const playRound = (attackCoord, playerTwoTurn = false) => {
     let randomAttackCoord = null;
     if (!gameOver) {
@@ -224,6 +215,24 @@ const gameController = (() => {
     }
     return randomAttackCoord;
   };
+
+  const reset = () => {
+    playerOne = Player();
+    playerTwo = Player(true);
+    playerOneBoard = Gameboard();
+    playerTwoBoard = Gameboard();
+    gameOver = false;
+    winner = null;
+  };
+
+  reset();
+  playerOneBoard.placeShip(playerOneShipOne, playerOneShipPositions[0]);
+  playerOneBoard.placeShip(playerOneShipTwo, playerOneShipPositions[1]);
+  playerOneBoard.placeShip(playerOneShipThree, playerOneShipPositions[2]);
+
+  playerTwoBoard.placeShip(playerTwoShipOne, playerTwoShipPositions[0]);
+  playerTwoBoard.placeShip(playerTwoShipTwo, playerTwoShipPositions[1]);
+  playerTwoBoard.placeShip(playerTwoShipThree, playerTwoShipPositions[2]);
 
   return {
     get playerOneBoard() {
@@ -245,6 +254,7 @@ const gameController = (() => {
       return playerTwo;
     },
     playRound,
+    reset,
   };
 })();
 
