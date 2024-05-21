@@ -20,11 +20,12 @@ body {
 
 #page-container {
   display: grid;
-  grid-template-rows: repeat(3, auto);
+  grid-template-rows: repeat(4, auto);
   grid-template-areas:
     'header header'
     'playerBoard playerBoard'
-    'resultsBoard resultsBoard';
+    'resultsBoard resultsBoard'
+    'playAgainButton playAgainButton';
   place-items: center;
 }
 
@@ -147,4 +148,20 @@ body {
 
 .winner {
   color: #407f7f;
+}
+
+.play-again-btn {
+  grid-area: playAgainButton;
+  margin: 2rem;
+  padding: 8px 16px;
+  border-radius: 4px;
+  background-color: #407f7f;
+  color: white;
+  display: none;
+}
+
+.play-again-btn:hover {
+  cursor: pointer;
+  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }

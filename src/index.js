@@ -176,13 +176,13 @@ const gameController = (() => {
   let gameOver;
   let winner;
 
-  const playerOneShipOne = Ship(5);
-  const playerOneShipTwo = Ship(3);
-  const playerOneShipThree = Ship(2);
+  let playerOneShipOne;
+  let playerOneShipTwo;
+  let playerOneShipThree;
 
-  const playerTwoShipOne = Ship(4);
-  const playerTwoShipTwo = Ship(1);
-  const playerTwoShipThree = Ship(2);
+  let playerTwoShipOne;
+  let playerTwoShipTwo;
+  let playerTwoShipThree;
 
   const playerOneShipPositions = [
     ['A1', 'A2', 'A3', 'A4', 'A5'],
@@ -223,16 +223,21 @@ const gameController = (() => {
     playerTwoBoard = Gameboard();
     gameOver = false;
     winner = null;
+    playerOneShipOne = Ship(5);
+    playerOneShipTwo = Ship(3);
+    playerOneShipThree = Ship(2);
+    playerTwoShipOne = Ship(4);
+    playerTwoShipTwo = Ship(1);
+    playerTwoShipThree = Ship(2);
+    playerOneBoard.placeShip(playerOneShipOne, playerOneShipPositions[0]);
+    playerOneBoard.placeShip(playerOneShipTwo, playerOneShipPositions[1]);
+    playerOneBoard.placeShip(playerOneShipThree, playerOneShipPositions[2]);
+    playerTwoBoard.placeShip(playerTwoShipOne, playerTwoShipPositions[0]);
+    playerTwoBoard.placeShip(playerTwoShipTwo, playerTwoShipPositions[1]);
+    playerTwoBoard.placeShip(playerTwoShipThree, playerTwoShipPositions[2]);
   };
 
   reset();
-  playerOneBoard.placeShip(playerOneShipOne, playerOneShipPositions[0]);
-  playerOneBoard.placeShip(playerOneShipTwo, playerOneShipPositions[1]);
-  playerOneBoard.placeShip(playerOneShipThree, playerOneShipPositions[2]);
-
-  playerTwoBoard.placeShip(playerTwoShipOne, playerTwoShipPositions[0]);
-  playerTwoBoard.placeShip(playerTwoShipTwo, playerTwoShipPositions[1]);
-  playerTwoBoard.placeShip(playerTwoShipThree, playerTwoShipPositions[2]);
 
   return {
     get playerOneBoard() {
@@ -261,7 +266,11 @@ const gameController = (() => {
 const displayController = (() => {
   const playerOneBoardDiv = document.querySelector('#playerOneBoard');
   const playerTwoBoardDiv = document.querySelector('#playerTwoBoard');
-  const { playerOneBoard, playerTwoBoard } = gameController;
+  const resultsDiv = document.querySelector('#resultsBoard');
+  let { playerOneBoard, playerTwoBoard } = gameController;
+  const playAgainButton = document.createElement('button');
+  playAgainButton.textContent = 'Play Again';
+  playAgainButton.classList.add('play-again-btn');
 
   const refreshBoard = (playerBoard, isComputer = false) => {
     const boardDiv = document.createElement('div');
@@ -352,11 +361,38 @@ const displayController = (() => {
 
     if (gameController.gameOver) {
       displayWinner(gameController.winner);
+      togglePlayAgainButton();
+      Array.from(
+        playerTwoBoardDiv.querySelector('.player-board').children,
+      ).forEach((childNode) => {
+        childNode.disabled = true;
+      });
     }
   }
 
+  function togglePlayAgainButton() {
+    if (playAgainButton.style.display === 'block') {
+      playAgainButton.style.display = 'none';
+    } else playAgainButton.style.display = 'block';
+  }
+
+  function resetPage() {
+    playerOneBoardDiv.removeChild(playerOneBoardDiv.lastChild);
+    playerTwoBoardDiv.removeChild(playerTwoBoardDiv.lastChild);
+    resultsDiv.textContent = '';
+    togglePlayAgainButton();
+    playerOneBoard = gameController.playerOneBoard;
+    playerTwoBoard = gameController.playerTwoBoard;
+    playerOneBoardDiv.appendChild(refreshBoard(playerOneBoard));
+    playerTwoBoardDiv.appendChild(refreshBoard(playerTwoBoard, true));
+  }
+
+  function clickHandlerPlayAgainButton() {
+    gameController.reset();
+    resetPage();
+  }
+
   function displayWinner(winningPlayer) {
-    const resultsDiv = document.querySelector('#resultsBoard');
     if (winningPlayer === gameController.playerOne) {
       resultsDiv.textContent = 'You Win!';
       resultsDiv.classList.add('winner');
@@ -370,6 +406,10 @@ const displayController = (() => {
 
   playerOneBoardDiv.appendChild(refreshBoard(playerOneBoard));
   playerTwoBoardDiv.appendChild(refreshBoard(playerTwoBoard, true));
+  playAgainButton.addEventListener('click', () =>
+    clickHandlerPlayAgainButton(),
+  );
+  document.querySelector('#page-container').append(playAgainButton);
 })();
 
 const funcs = {
