@@ -179,20 +179,28 @@ const gameController = (() => {
   let playerOneShipOne;
   let playerOneShipTwo;
   let playerOneShipThree;
+  let playerOneShipFour;
+  let playerOneShipFive;
 
   let playerTwoShipOne;
   let playerTwoShipTwo;
   let playerTwoShipThree;
+  let playerTwoShipFour;
+  let playerTwoShipFive;
 
   const playerOneShipPositions = [
     ['A1', 'A2', 'A3', 'A4', 'A5'],
+    ['B7', 'C7', 'D7', 'E7'],
     ['C3', 'D3', 'E3'],
+    ['G8', 'G9', 'G10'],
     ['J2', 'J3'],
   ];
 
   const playerTwoShipPositions = [
-    ['B1', 'B2', 'B3', 'B4'],
-    ['D5'],
+    ['B1', 'B2', 'B3', 'B4', 'B5'],
+    ['E2', 'F2', 'G2', 'H2'],
+    ['F8', 'F9', 'F10'],
+    ['A9', 'B9', 'C9'],
     ['I4', 'I5'],
   ];
 
@@ -224,17 +232,25 @@ const gameController = (() => {
     gameOver = false;
     winner = null;
     playerOneShipOne = Ship(5);
-    playerOneShipTwo = Ship(3);
-    playerOneShipThree = Ship(2);
-    playerTwoShipOne = Ship(4);
-    playerTwoShipTwo = Ship(1);
-    playerTwoShipThree = Ship(2);
+    playerOneShipTwo = Ship(4);
+    playerOneShipThree = Ship(3);
+    playerOneShipFour = Ship(3);
+    playerOneShipFive = Ship(2);
+    playerTwoShipOne = Ship(5);
+    playerTwoShipTwo = Ship(4);
+    playerTwoShipThree = Ship(3);
+    playerTwoShipFour = Ship(3);
+    playerTwoShipFive = Ship(2);
     playerOneBoard.placeShip(playerOneShipOne, playerOneShipPositions[0]);
     playerOneBoard.placeShip(playerOneShipTwo, playerOneShipPositions[1]);
     playerOneBoard.placeShip(playerOneShipThree, playerOneShipPositions[2]);
+    playerOneBoard.placeShip(playerOneShipFour, playerOneShipPositions[3]);
+    playerOneBoard.placeShip(playerOneShipFive, playerOneShipPositions[4]);
     playerTwoBoard.placeShip(playerTwoShipOne, playerTwoShipPositions[0]);
     playerTwoBoard.placeShip(playerTwoShipTwo, playerTwoShipPositions[1]);
     playerTwoBoard.placeShip(playerTwoShipThree, playerTwoShipPositions[2]);
+    playerTwoBoard.placeShip(playerTwoShipFour, playerTwoShipPositions[3]);
+    playerTwoBoard.placeShip(playerTwoShipFive, playerTwoShipPositions[4]);
   };
 
   reset();

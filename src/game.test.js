@@ -1,3 +1,4 @@
+/** @jest-environment jsdom */
 let Ship;
 let Gameboard;
 const game = require('.');
