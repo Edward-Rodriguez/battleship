@@ -409,7 +409,7 @@ const displayController = (() => {
   playAgainButton.addEventListener('click', () =>
     clickHandlerPlayAgainButton(),
   );
-  document.querySelector('#page-container').append(playAgainButton);
+  document.querySelector('#content').append(playAgainButton);
 })();
 
 const funcs = {
