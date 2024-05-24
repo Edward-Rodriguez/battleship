@@ -82,6 +82,26 @@ const Gameboard = () => {
     return true;
   }
 
+  function placeShipRandomly(ship) {
+    const newShipCoordinates = new Array(ship.length).fill(null);
+
+    function randomCloseCoord(coord) {
+      const changeValue = [-1, 0, 1];
+      const randomXIndex = Math.floor(Math.random() * changeValue.length);
+      const randomYIndex = Math.floor(Math.random() * changeValue.length);
+      const randomX = changeValue[randomXIndex];
+      const randomY = changeValue[randomYIndex];
+
+      let xCoord = (Number(coord.substring(1)) + randomY) % 10;
+      let yCoordCharCode = coord.charCodeAt(0) + randomX;
+
+      if (xCoord > 74) xCoord = 65;
+      else if (xCoord < 65) xCoord = 74;
+      if (yCoordCharCode > 74) yCoordCharCode = 65;
+      else if (yCoordCharCode < 65) yCoordCharCode = 74;
+    }
+  }
+
   function receiveAttack(coordinate) {
     const [row, col] = [...coordinateToIndex(coordinate)];
     if (board[row][col]) {
@@ -203,6 +223,11 @@ const gameController = (() => {
     ['A9', 'B9', 'C9'],
     ['I4', 'I5'],
   ];
+
+  const randomShipPosition = (shipArray) => {
+    const newShipArray = [...shipArray];
+    newShipArray.forEach((shipCoord, index) => {});
+  };
 
   const playRound = (attackCoord, playerTwoTurn = false) => {
     let randomAttackCoord = null;
