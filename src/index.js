@@ -3,6 +3,7 @@ import './index.css';
 function Ship(size = null) {
   let length = size;
   let hitCounter = null;
+  const id = Math.floor(Math.random() * Date.now());
 
   function isSunk() {
     return length ? length === hitCounter : false;
@@ -22,6 +23,9 @@ function Ship(size = null) {
     },
     get hitCounter() {
       return hitCounter;
+    },
+    get id() {
+      return id;
     },
     hit,
     isSunk,
@@ -83,22 +87,75 @@ const Gameboard = () => {
   }
 
   function placeShipRandomly(ship) {
-    const newShipCoordinates = new Array(ship.length).fill(null);
+    // const newShipCoordinates = new Array(ship.length).fill(null);
+    placeShip(ship, randomCoordinates(ship.length));
 
-    function randomCloseCoord(coord) {
-      const changeValue = [-1, 0, 1];
-      const randomXIndex = Math.floor(Math.random() * changeValue.length);
-      const randomYIndex = Math.floor(Math.random() * changeValue.length);
-      const randomX = changeValue[randomXIndex];
-      const randomY = changeValue[randomYIndex];
+    // function randomCloseCoord(coord) {
+    //   const changeValue = [-1, 0, 1];
+    //   const randomXIndex = Math.floor(Math.random() * changeValue.length);
+    //   const randomYIndex = Math.floor(Math.random() * changeValue.length);
+    //   const randomX = changeValue[randomXIndex];
+    //   const randomY = changeValue[randomYIndex];
 
-      let xCoord = (Number(coord.substring(1)) + randomY) % 10;
-      let yCoordCharCode = coord.charCodeAt(0) + randomX;
+    //   let xCoord = Number(coord.substring(1)) + randomY;
+    //   let yCoordCharCode = coord.charCodeAt(0) + randomX;
+    //   const newCoord = String.fromCharCode(yCoordCharCode) + xCoord.toString();
 
-      if (xCoord > 74) xCoord = 65;
-      else if (xCoord < 65) xCoord = 74;
-      if (yCoordCharCode > 74) yCoordCharCode = 65;
-      else if (yCoordCharCode < 65) yCoordCharCode = 74;
+    //   if (!isValidCoordinate(newCoord)) {
+    //     if (isOccupied(newCoord)) {
+    //     }
+    //   }
+
+    //   if (xCoord > 74) xCoord = 65;
+    //   else if (xCoord < 65) xCoord = 74;
+    //   if (yCoordCharCode > 74) yCoordCharCode = 65;
+    //   else if (yCoordCharCode < 65) yCoordCharCode = 74;
+    // }
+
+    function randomCoordinates(shipLength) {
+      const randomRowIndex = Math.floor(Math.random() * boardSize);
+      const randomColIndex = Math.floor(Math.random() * boardSize);
+      const orientation = ['horizontal', 'vertical'];
+      const randomOrientation =
+        orientation[Math.floor(Math.random() * orientation.length)];
+      const coordinates = [];
+
+      if (!isOccupied(indexToCoordinate(randomRowIndex, randomColIndex))) {
+        const verticalCoords = [];
+        const horizontalCoords = [];
+        if (shipLength === 5) {
+          verticalCoords.push(
+            indexToCoordinate(randomRowIndex - 2, randomColIndex),
+            indexToCoordinate(randomRowIndex - 1, randomColIndex),
+            indexToCoordinate(randomRowIndex, randomColIndex),
+            indexToCoordinate(randomRowIndex + 1, randomColIndex),
+            indexToCoordinate(randomRowIndex + 2, randomColIndex),
+          );
+          horizontalCoords.push(
+            indexToCoordinate(randomRowIndex, randomColIndex - 2),
+            indexToCoordinate(randomRowIndex, randomColIndex - 1),
+            indexToCoordinate(randomRowIndex, randomColIndex),
+            indexToCoordinate(randomRowIndex, randomColIndex + 1),
+            indexToCoordinate(randomRowIndex, randomColIndex + 2),
+          );
+          if (
+            randomOrientation === 'vertical' &&
+            hasValidCoordinates(verticalCoords)
+          ) {
+            return verticalCoords;
+          }
+          if (hasValidCoordinates(horizontalCoords)) {
+            return horizontalCoords;
+          }
+          if (hasValidCoordinates(verticalCoords)) {
+            return verticalCoords;
+          }
+        }
+      }
+      return randomCoordinates(shipLength);
+      function hasValidCoordinates(coords) {
+        return coords.every((newCoord) => isValidCoordinate(newCoord));
+      }
     }
   }
 
@@ -136,6 +193,7 @@ const Gameboard = () => {
     isEveryShipSunk,
     indexToCoordinate,
     coordinateToIndex,
+    placeShipRandomly,
     get board() {
       return board;
     },
@@ -224,11 +282,6 @@ const gameController = (() => {
     ['I4', 'I5'],
   ];
 
-  const randomShipPosition = (shipArray) => {
-    const newShipArray = [...shipArray];
-    newShipArray.forEach((shipCoord, index) => {});
-  };
-
   const playRound = (attackCoord, playerTwoTurn = false) => {
     let randomAttackCoord = null;
     if (!gameOver) {
@@ -266,16 +319,17 @@ const gameController = (() => {
     playerTwoShipThree = Ship(3);
     playerTwoShipFour = Ship(3);
     playerTwoShipFive = Ship(2);
-    playerOneBoard.placeShip(playerOneShipOne, playerOneShipPositions[0]);
-    playerOneBoard.placeShip(playerOneShipTwo, playerOneShipPositions[1]);
-    playerOneBoard.placeShip(playerOneShipThree, playerOneShipPositions[2]);
-    playerOneBoard.placeShip(playerOneShipFour, playerOneShipPositions[3]);
-    playerOneBoard.placeShip(playerOneShipFive, playerOneShipPositions[4]);
+    // playerOneBoard.placeShip(playerOneShipOne, playerOneShipPositions[0]);
+    // playerOneBoard.placeShip(playerOneShipTwo, playerOneShipPositions[1]);
+    // playerOneBoard.placeShip(playerOneShipThree, playerOneShipPositions[2]);
+    // playerOneBoard.placeShip(playerOneShipFour, playerOneShipPositions[3]);
+    // playerOneBoard.placeShip(playerOneShipFive, playerOneShipPositions[4]);
     playerTwoBoard.placeShip(playerTwoShipOne, playerTwoShipPositions[0]);
     playerTwoBoard.placeShip(playerTwoShipTwo, playerTwoShipPositions[1]);
     playerTwoBoard.placeShip(playerTwoShipThree, playerTwoShipPositions[2]);
     playerTwoBoard.placeShip(playerTwoShipFour, playerTwoShipPositions[3]);
     playerTwoBoard.placeShip(playerTwoShipFive, playerTwoShipPositions[4]);
+    playerOneBoard.placeShipRandomly(playerOneShipOne);
   };
 
   reset();
