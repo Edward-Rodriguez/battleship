@@ -244,22 +244,6 @@ const gameController = (() => {
   let playerTwoShipFour;
   let playerTwoShipFive;
 
-  const playerOneShipPositions = [
-    ['A1', 'A2', 'A3', 'A4', 'A5'],
-    ['B7', 'C7', 'D7', 'E7'],
-    ['C3', 'D3', 'E3'],
-    ['G8', 'G9', 'G10'],
-    ['J2', 'J3'],
-  ];
-
-  const playerTwoShipPositions = [
-    ['B1', 'B2', 'B3', 'B4', 'B5'],
-    ['E2', 'F2', 'G2', 'H2'],
-    ['F8', 'F9', 'F10'],
-    ['A9', 'B9', 'C9'],
-    ['I4', 'I5'],
-  ];
-
   const playRound = (attackCoord, playerTwoTurn = false) => {
     let randomAttackCoord = null;
     if (!gameOver) {
@@ -297,16 +281,11 @@ const gameController = (() => {
     playerTwoShipThree = Ship(3);
     playerTwoShipFour = Ship(3);
     playerTwoShipFive = Ship(2);
-    // playerOneBoard.placeShip(playerOneShipOne, playerOneShipPositions[0]);
-    // playerOneBoard.placeShip(playerOneShipTwo, playerOneShipPositions[1]);
-    // playerOneBoard.placeShip(playerOneShipThree, playerOneShipPositions[2]);
-    // playerOneBoard.placeShip(playerOneShipFour, playerOneShipPositions[3]);
-    // playerOneBoard.placeShip(playerOneShipFive, playerOneShipPositions[4]);
-    playerTwoBoard.placeShip(playerTwoShipOne, playerTwoShipPositions[0]);
-    playerTwoBoard.placeShip(playerTwoShipTwo, playerTwoShipPositions[1]);
-    playerTwoBoard.placeShip(playerTwoShipThree, playerTwoShipPositions[2]);
-    playerTwoBoard.placeShip(playerTwoShipFour, playerTwoShipPositions[3]);
-    playerTwoBoard.placeShip(playerTwoShipFive, playerTwoShipPositions[4]);
+    playerTwoBoard.placeShipRandomly(playerTwoShipOne);
+    playerTwoBoard.placeShipRandomly(playerTwoShipTwo);
+    playerTwoBoard.placeShipRandomly(playerTwoShipThree);
+    playerTwoBoard.placeShipRandomly(playerTwoShipFour);
+    playerTwoBoard.placeShipRandomly(playerTwoShipFive);
     playerOneBoard.placeShipRandomly(playerOneShipOne);
     playerOneBoard.placeShipRandomly(playerOneShipTwo);
     playerOneBoard.placeShipRandomly(playerOneShipThree);
@@ -343,6 +322,7 @@ const gameController = (() => {
 const displayController = (() => {
   const playerOneBoardDiv = document.querySelector('#playerOneBoard');
   const playerTwoBoardDiv = document.querySelector('#playerTwoBoard');
+  const randomizeButton = document.querySelector('#randomizeButton');
   const resultsDiv = document.querySelector('#resultsBoard');
   let { playerOneBoard, playerTwoBoard } = gameController;
   const playAgainButton = document.createElement('button');
@@ -404,7 +384,14 @@ const displayController = (() => {
     return boardDiv;
   };
 
+  function togglePlayAgainButton() {
+    if (playAgainButton.style.display === 'block') {
+      playAgainButton.style.display = 'none';
+    } else playAgainButton.style.display = 'block';
+  }
+
   function clickHandlerCell(ev) {
+    randomizeButton.disabled = true;
     const selectedCell = ev.target;
     const selectedCellCoordinates = selectedCell.dataset.coord;
     const [row, col] = playerOneBoard.coordinateToIndex(
@@ -436,6 +423,18 @@ const displayController = (() => {
       playerOneAttackCell.disabled = true;
     }
 
+    function displayWinner(winningPlayer) {
+      if (winningPlayer === gameController.playerOne) {
+        resultsDiv.textContent = 'You Win!';
+        resultsDiv.classList.add('winner');
+        resultsDiv.classList.remove('loser');
+      } else {
+        resultsDiv.textContent = 'You Lose';
+        resultsDiv.classList.add('loser');
+        resultsDiv.classList.remove('winner');
+      }
+    }
+
     if (gameController.gameOver) {
       displayWinner(gameController.winner);
       togglePlayAgainButton();
@@ -447,44 +446,35 @@ const displayController = (() => {
     }
   }
 
-  function togglePlayAgainButton() {
-    if (playAgainButton.style.display === 'block') {
-      playAgainButton.style.display = 'none';
-    } else playAgainButton.style.display = 'block';
-  }
-
   function resetPage() {
     playerOneBoardDiv.removeChild(playerOneBoardDiv.lastChild);
     playerTwoBoardDiv.removeChild(playerTwoBoardDiv.lastChild);
     resultsDiv.textContent = '';
-    togglePlayAgainButton();
     playerOneBoard = gameController.playerOneBoard;
     playerTwoBoard = gameController.playerTwoBoard;
     playerOneBoardDiv.appendChild(refreshBoard(playerOneBoard));
     playerTwoBoardDiv.appendChild(refreshBoard(playerTwoBoard, true));
   }
 
-  function clickHandlerPlayAgainButton() {
+  function clickHandlerCellRandomizeButton() {
     gameController.reset();
     resetPage();
   }
 
-  function displayWinner(winningPlayer) {
-    if (winningPlayer === gameController.playerOne) {
-      resultsDiv.textContent = 'You Win!';
-      resultsDiv.classList.add('winner');
-      resultsDiv.classList.remove('loser');
-    } else {
-      resultsDiv.textContent = 'You Lose';
-      resultsDiv.classList.add('loser');
-      resultsDiv.classList.remove('winner');
-    }
+  function clickHandlerPlayAgainButton() {
+    gameController.reset();
+    resetPage();
+    togglePlayAgainButton();
+    randomizeButton.disabled = false;
   }
 
   playerOneBoardDiv.appendChild(refreshBoard(playerOneBoard));
   playerTwoBoardDiv.appendChild(refreshBoard(playerTwoBoard, true));
   playAgainButton.addEventListener('click', () =>
     clickHandlerPlayAgainButton(),
+  );
+  randomizeButton.addEventListener('click', () =>
+    clickHandlerCellRandomizeButton(),
   );
   document.querySelector('#content').append(playAgainButton);
 })();
