@@ -440,7 +440,8 @@ const displayController = (() => {
       togglePlayAgainButton();
       Array.from(
         playerTwoBoardDiv.querySelector('.player-board').children,
-      ).forEach((childNode) => {
+      ).forEach((node) => {
+        const childNode = node;
         childNode.disabled = true;
       });
     }
